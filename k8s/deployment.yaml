@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: devproject-deployment
+  labels:
+    app: devproject
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: devproject
+  template:
+    metadata:
+      labels:
+        app: devproject
+    spec:
+      containers:
+        - name: devproject
+          image: mujtaba110/devproject:latest  # replace with your Docker Hub username
+          ports:
+            - containerPort: 3000
+          env:
+            - name: PORT
+              value: "3000"

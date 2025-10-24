@@ -1,0 +1,31 @@
+node_modules/
+npm-debug.log
+yarn-error.log
+
+.env
+.env.local
+.env.*.local
+
+dist/
+build/
+coverage/
+
+*.pid
+*.logdocker-compose.override.yml
+
+workspace/
+*jenkinsfile.bak
+# System Files
+.DS_Store
+Thumbs.db
+
+# IDEs / Editors
+.vscode/
+.idea/
+*.swp
+
+# Terraform
+*.tfstate
+*.tfstate.backup
+.terraform/
+.terraform.lock.hcl
