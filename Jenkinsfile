@@ -3,10 +3,13 @@ pipeline {
 
     environment {
         IMAGE_NAME = "mujtaba110/devproject:latest"
+        AWS_REGION = "eu-north-1"
+        CLUSTER_NAME = "devproject-cluster"
+
     }
 
     stages {
-        stage('Build') {
+        stage('Build Docker Image') {
             steps {
                 script {
                     echo "🔨 Building Docker image..."
@@ -33,7 +36,10 @@ pipeline {
             steps {
                 script {
                     echo "🚀 Deploying to Kubernetes..."
-                    sh 'kubectl apply -f ./k8s/'
+                    sh '''
+                        aws eks update-kubeconfig --region ${AWS_REGION} --name ${CLUSTER_NAME}
+                        kubectl apply -f ./k8s/
+                    '''
                 }
             }
         }
