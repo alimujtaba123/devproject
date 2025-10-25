@@ -11,9 +11,11 @@ pipeline{
         }
         stage('Push to Docker Hub'){
             steps{
-                withCredentials([string(credentialsId: 'docker-hub-token', variable: 'Docker_Token' )]){
-                    sh 'echo $DOCKER_TOKEN | docker login -u mujtaba110 --password-stdin'
-                    sh 'docker push mujtaba110/devproject:latest'
+                withCredentials([usernamePassword(credentialsId: 'docker-hub-token', usernameVariable: 'Docker_Token',passwordVariable:'DOCKER_PASS' )]){
+                    sh """
+                        echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                        docker push mujtaba110/devproject:latest
+                    """
                 }
             }
         }
