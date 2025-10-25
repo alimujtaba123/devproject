@@ -5,6 +5,13 @@ resource "aws_key_pair" "devops_key" {
     key_name = "devops-key"
     public_key = file("${path.module}/devops-key.pub")
 }
+resource "aws_eip" "devops_eip" {
+  instance = aws_instance.devops_instance.id
+}
+output "instance_public_ip" {
+  value = aws_eip.devops_eip.public_ip
+}
+
 resource "aws_security_group" "devops_sg" {
     name = "devops-sg"
     description = "Allow SSH, HTTP, Jenkins, and K8s ports"
