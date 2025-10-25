@@ -1,28 +1,50 @@
-pipeline{
+pipeline {
     agent any
 
-    stages{
-        stage('Build'){
-            steps{
-                script{
-                    docker.build("mujtaba110/devproject:latest", ".")
+    environment {
+        IMAGE_NAME = "mujtaba110/devproject:latest"
+    }
+
+    stages {
+        stage('Build') {
+            steps {
+                script {
+                    echo "🔨 Building Docker image..."
+                    docker.build("${IMAGE_NAME}", ".")
                 }
             }
         }
-        stage('Push to Docker Hub'){
-            steps{
-                withCredentials([usernamePassword(credentialsId: 'docker-hub-token', usernameVariable: 'Docker_Token',passwordVariable:'DOCKER_PASS' )]){
-                    sh """
-                        echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-                        docker push mujtaba110/devproject:latest
-                    """
+
+        stage('Push to Docker Hub') {
+            steps {
+                script {
+                    echo "📤 Pushing image to Docker Hub..."
+                    withCredentials([usernamePassword(credentialsId: 'docker-hub-token', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                        sh '''
+                            echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+                            docker push ${IMAGE_NAME}
+                        '''
+                    }
                 }
             }
         }
-        stage('Deploy to kubernetes'){
-            steps{
-                sh 'kubectl apply -f ./k8s/'
+
+        stage('Deploy to Kubernetes') {
+            steps {
+                script {
+                    echo "🚀 Deploying to Kubernetes..."
+                    sh 'kubectl apply -f ./k8s/'
+                }
             }
+        }
+    }
+
+    post {
+        success {
+            echo "✅ Pipeline executed successfully!"
+        }
+        failure {
+            echo "❌ Pipeline failed. Check logs for details."
         }
     }
 }
