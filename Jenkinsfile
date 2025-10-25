@@ -5,7 +5,7 @@ pipeline{
         stage('Build'){
             steps{
                 script{
-                    docker.build("mujtaba110/devproject:latest", "./docker")
+                    docker.build("mujtaba110/devproject:latest", ".")
                 }
             }
         }
