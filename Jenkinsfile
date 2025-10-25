@@ -34,12 +34,14 @@ pipeline {
 
         stage('Deploy to Kubernetes') {
             steps {
-                script {
-                    echo "🚀 Deploying to Kubernetes..."
-                    sh '''
-                        aws eks update-kubeconfig --region ${AWS_REGION} --name ${CLUSTER_NAME}
-                        kubectl apply -f ./k8s/
-                    '''
+                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-credentials']]) {
+                    script {
+                        echo "🚀 Deploying to Kubernetes..."
+                        sh '''
+                            aws eks update-kubeconfig --region ${AWS_REGION} --name ${CLUSTER_NAME}
+                            kubectl apply -f ./k8s/
+                        '''
+                    }
                 }
             }
         }
