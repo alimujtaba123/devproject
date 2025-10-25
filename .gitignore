@@ -30,4 +30,4 @@ Thumbs.db
 .terraform/
 .terraform.lock.hcl
 devops-key.pem
-devops-key.pubterr
+devops-key.pub
