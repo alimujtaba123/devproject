@@ -16,4 +16,4 @@ notes = notes.filter(n => n.id !== req.params.id);
 res.status(204).send();
 });
 const port = process.env.PORT || 3000;
-app.listen(port, () => console.log(`CloudNotes backend listening on ${port}`));
+app.listen(port, () => console.log(`CloudNotes backend running succesfully on port 3000! ${port}`));
