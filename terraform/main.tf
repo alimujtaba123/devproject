@@ -8,7 +8,7 @@ resource "aws_key_pair" "devops_key" {
 resource "aws_eip" "devops_eip" {
   instance = aws_instance.devops_instance.id
 }
-output "instance_public_ip" {
+output "elastic_ip" {
   value = aws_eip.devops_eip.public_ip
 }
 
